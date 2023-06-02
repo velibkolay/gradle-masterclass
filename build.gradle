@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+}
+
+
+
+task hi
+
+dependencies {
+
+}
+
+
+project.hi.doLast {
+    logger.info "Hi"
+    println "${project.tasks.findAll {task -> task.name.startsWith("h")}}"
+}
+
+task hello {
+    description = "General Kenobi"
+    group = "star wars"
+
+
+    dependsOn("hi", hi)
+
+    doLast {
+        println "general kenobi"
+    }
+
+    doFirst {
+        println "hello there"
+    }
+}
+
+hello.doLast {
+    println "order 66"
+}
+
+task printTaskGraph {
+    dependsOn(hi, hello)
+
+    project.gradle.taskGraph.whenReady {
+        println project.gradle.taskGraph.allTasks
+    }
+}
+
+task last {
+    dependsOn(printTaskGraph)
+}
+
